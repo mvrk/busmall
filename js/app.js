@@ -20,7 +20,7 @@ function Busmall(name, fileExtention = 'jpg') {
   this.name = name;
   this.views = 0;
   this.votes = 0;
-  this.photo = `img/${name}.${fileExtention}`;
+  this.photo = `./img/${name}.${fileExtention}`;
 
   busmallItems.push(this);
 }
@@ -46,34 +46,62 @@ new Busmall('wine-glass');
 
 //***********Helper functions/Executable code***********
 
-function getRandomIndex() {
-  return Math.floor(Math.random() * busmallItems.length);
-}
+// function getRandomIndex() {
+//   return Math.floor(Math.random() * busmallItems.length);
+// }
 function renderImgs() {
 
-  let itemOneIndex = getRandomIndex();
-  let itemTwoIndex = getRandomIndex();
-  while (itemOneIndex === itemTwoIndex) {
-    itemTwoIndex = getRandomIndex();
+  let showItemIndex = [];
+  for (let i = 0; i < 3; i++) {
+    let a = true, index;
+    while (a) {
+      index = Math.floor(Math.random() * busmallItems.length);
+      a = showItemIndex.includes(index);
+    }
+    showItemIndex.push(index);
   }
-  imgOne.src = busmallItems[itemOneIndex].photo;
-  imgOne.alt = busmallItems[itemOneIndex].name;
-  busmallItems[itemOneIndex].views++;
+  imgOne.src = busmallItems[showItemIndex[0]].photo;
+  imgOne.alt = busmallItems[showItemIndex[0]].name;
+  busmallItems[showItemIndex[0]].views++;
 
-  imgTwo.src = busmallItems[itemTwoIndex].photo;
-  imgTwo.alt = busmallItems[itemTwoIndex].name;
-  busmallItems[itemTwoIndex].views++;
+  imgTwo.src = busmallItems[showItemIndex[1]].photo;
+  imgTwo.alt = busmallItems[showItemIndex[1]].name;
+  busmallItems[showItemIndex[1]].views++;
 
-  imgThree.src = busmallItems[itemThreeIndex].photo;
-  imgThree.alt = busmallItems[itemThreeIndex].name;
-  busmallItems[itemThreeIndex].views++;
+  imgThree.src = busmallItems[showItemIndex[2]].photo;
+  imgThree.alt = busmallItems[showItemIndex[2]].name;
+  busmallItems[showItemIndex[2]].views++;
 }
-
 renderImgs();
 
 //***********Event Handlers***********
+function handleClick(event) {
+  busmallCount--;
+  let imgClicked = event.target.alt;
 
+  for (let i = 0; i < busmallItems.length; i++) {
+    if (imgClicked === busmallItems[i].name) {
+      busmallItems[i].votes++;
+    }
+  }
 
+  renderImgs();
+
+  if (busmallCount === 0) {
+    imgContainer.removeEventListener('click', handleClick);
+  }
+}
+
+function handleShowResult() {
+  if (busmallCount === 0) {
+    for (let i = 0; i < busmallItems.length; i++) {
+      let liElement = document.createElement('li');
+      liElement.textContent = `${busmallItems[i].name} showed ${busmallItems.views} and voted for ${busmallItems[i].votes}
+times.`;
+      resultsList.appendChild(liElement);
+    }
+  }
+}
 //***********Event listeners***********
 imgContainer.addEventListener('click', handleClick);
 shwoResultsBtn.addEventListener('click', handleShowResult);
