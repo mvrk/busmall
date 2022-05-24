@@ -11,9 +11,11 @@ let imgContainer = document.getElementById('img-container');
 let imgOne = document.getElementById('img-one');
 let imgTwo = document.getElementById('img-two');
 let imgThree = document.getElementById('img-three');
-
 let shwoResultsBtn = document.getElementById('show-result-btn');
 let resultsList = document.getElementById('results-list');
+
+// ********** CANVAS REFERENCE ***************
+let ctx = document.getElementById('my-chart').getContext('2d');
 
 //***********Constructor***********
 function Busmall(name, fileExtention = 'jpg') {
@@ -46,9 +48,6 @@ new Busmall('wine-glass');
 
 //***********Helper functions/Executable code***********
 
-// function getRandomIndex() {
-//   return Math.floor(Math.random() * busmallItems.length);
-// }
 function renderImgs() {
 
   let showItemIndex = [];
@@ -71,9 +70,99 @@ function renderImgs() {
   imgThree.src = busmallItems[showItemIndex[2]].photo;
   imgThree.alt = busmallItems[showItemIndex[2]].name;
   busmallItems[showItemIndex[2]].views++;
+
+  // imgOne.src = busmallItems[showItemIndex.pop()].photo;
+  // imgOne.alt = busmallItems[showItemIndex.pop()].name;
+  // busmallItems[showItemIndex.pop()].views++;
+
+  // imgTwo.src = busmallItems[showItemIndex.pop()].photo;
+  // imgTwo.alt = busmallItems[showItemIndex.pop()].name;
+  // busmallItems[showItemIndex.pop()].views++;
+
+  // imgThree.src = busmallItems[showItemIndex.pop()].photo;
+  // imgThree.alt = busmallItems[showItemIndex.pop()].name;
+  // busmallItems[showItemIndex.pop()].views++;
 }
 renderImgs();
 
+//********Chart render function*********** 
+function renderChart() {
+  let busmallNames = [];
+  let busmallVotes = [];
+  let busmallViews = [];
+
+  for (let i = 0; i < busmallItems.length; i++) {
+    busmallNames.push(busmallItems[i].name);
+    busmallVotes.push(busmallItems[i].votes);
+    busmallViews.push(busmallItems[i].views);
+  }
+  let myChartObj = {
+    type: 'bar',
+    data: {
+      labels: busmallNames,
+      datasets: [{
+        label: '# of Votes',
+        data: busmallVotes,
+        backgroundColor: [
+          '#ff7300',
+          '#fffb00',
+          '#48ff00',
+          '#00ffd5',
+          '#002bff',
+          '#7a00ff',
+          '#ff00c8',
+          '#ff0000'
+        ],
+        borderColor: [
+          '#ff7300',
+          '#fffb00',
+          '#48ff00',
+          '#00ffd5',
+          '#002bff',
+          '#7a00ff',
+          '#ff00c8',
+          '#ff0000'
+        ],
+        borderWidth: 1
+      },
+      {
+        label: '# of Views',
+        data: busmallViews,
+        backgroundColor: [
+          '#ff0000',
+          '#ff7300',
+          '#fffb00',
+          '#48ff00',
+          '#00ffd5',
+          '#002bff',
+          '#7a00ff',
+          '#ff00c8',
+          '#ff0000'
+        ],
+        borderColor: [
+          '#ff0000',
+          '#ff7300',
+          '#fffb00',
+          '#48ff00',
+          '#00ffd5',
+          '#002bff',
+          '#7a00ff',
+          '#ff00c8',
+          '#ff0000'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+new Chart(ctx, myChartObj);
+}
 //***********Event Handlers***********
 function handleClick(event) {
   busmallCount--;
@@ -89,17 +178,20 @@ function handleClick(event) {
 
   if (busmallCount === 0) {
     imgContainer.removeEventListener('click', handleClick);
+    // renderChart();
   }
+
 }
 
 function handleShowResult() {
   if (busmallCount === 0) {
-    for (let i = 0; i < busmallItems.length; i++) {
-      let liElement = document.createElement('li');
-      liElement.textContent = `${busmallItems[i].name} showed ${busmallItems[i].views} times and voted for ${busmallItems[i].votes}
-times.`;
-      resultsList.appendChild(liElement);
-    }
+    renderChart();
+//     for (let i = 0; i < busmallItems.length; i++) {
+//       let liElement = document.createElement('li');
+//       liElement.textContent = `${busmallItems[i].name} showed ${busmallItems[i].views} times and voted for ${busmallItems[i].votes}
+// times.`;
+//       resultsList.appendChild(liElement);
+//     }
   }
 }
 //***********Event listeners***********
