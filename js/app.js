@@ -96,7 +96,7 @@ function handleShowResult() {
   if (busmallCount === 0) {
     for (let i = 0; i < busmallItems.length; i++) {
       let liElement = document.createElement('li');
-      liElement.textContent = `${busmallItems[i].name} showed ${busmallItems.views} and voted for ${busmallItems[i].votes}
+      liElement.textContent = `${busmallItems[i].name} showed ${busmallItems[i].views} times and voted for ${busmallItems[i].votes}
 times.`;
       resultsList.appendChild(liElement);
     }
