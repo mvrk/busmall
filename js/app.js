@@ -26,32 +26,48 @@ function Busmall(name, fileExtention = 'jpg') {
 
   busmallItems.push(this);
 }
-new Busmall('sweep', 'png');
-new Busmall('bag');
-new Busmall('banana');
-new Busmall('bathroom');
-new Busmall('boots');
-new Busmall('breakfast');
-new Busmall('bubblegum');
-new Busmall('chair');
-new Busmall('cthulhu');
-new Busmall('dog-duck');
-new Busmall('dragon');
-new Busmall('pen');
-new Busmall('pet-sweep');
-new Busmall('scissors');
-new Busmall('shark');
-new Busmall('tauntaun');
-new Busmall('unicorn');
-new Busmall('water-can');
-new Busmall('wine-glass');
 
+//*************local storage part 2 */
+
+//step 3: geit it out of the local storage
+
+let retrivedItems = localStorage.getItem('busmallItems');
+
+// Parse data for reuse
+
+let parsedItems = JSON.parse(retrivedItems);
+console.log('Parsed >>>>', parsedItems);
+
+if (retrivedItems) {
+  busmallItems = parsedItems;
+}
+else {
+  new Busmall('sweep', 'png');
+  new Busmall('bag');
+  new Busmall('banana');
+  new Busmall('bathroom');
+  new Busmall('boots');
+  new Busmall('breakfast');
+  new Busmall('bubblegum');
+  new Busmall('chair');
+  new Busmall('cthulhu');
+  new Busmall('dog-duck');
+  new Busmall('dragon');
+  new Busmall('pen');
+  new Busmall('pet-sweep');
+  new Busmall('scissors');
+  new Busmall('shark');
+  new Busmall('tauntaun');
+  new Busmall('unicorn');
+  new Busmall('water-can');
+  new Busmall('wine-glass');
+}
 //***********Helper functions/Executable code***********
 
 function renderImgs() {
 
   let showItemIndex = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 6; i++) {
     let a = true, index;
     while (a) {
       index = Math.floor(Math.random() * busmallItems.length);
@@ -59,29 +75,22 @@ function renderImgs() {
     }
     showItemIndex.push(index);
   }
-  imgOne.src = busmallItems[showItemIndex[0]].photo;
-  imgOne.alt = busmallItems[showItemIndex[0]].name;
-  busmallItems[showItemIndex[0]].views++;
 
-  imgTwo.src = busmallItems[showItemIndex[1]].photo;
-  imgTwo.alt = busmallItems[showItemIndex[1]].name;
-  busmallItems[showItemIndex[1]].views++;
+  let indexOne = showItemIndex.shift();
+  let indexTwo = showItemIndex.shift();
+  let indexThree = showItemIndex.shift();
+  imgOne.src = busmallItems[indexOne].photo;
+  imgOne.alt = busmallItems[indexOne].name;
+  busmallItems[indexOne].views++;
 
-  imgThree.src = busmallItems[showItemIndex[2]].photo;
-  imgThree.alt = busmallItems[showItemIndex[2]].name;
-  busmallItems[showItemIndex[2]].views++;
+  imgTwo.src = busmallItems[indexTwo].photo;
+  imgTwo.alt = busmallItems[indexTwo].name;
+  busmallItems[indexTwo].views++;
 
-  // imgOne.src = busmallItems[showItemIndex.pop()].photo;
-  // imgOne.alt = busmallItems[showItemIndex.pop()].name;
-  // busmallItems[showItemIndex.pop()].views++;
+  imgThree.src = busmallItems[indexThree].photo;
+  imgThree.alt = busmallItems[indexThree].name;
+  busmallItems[indexThree].views++;
 
-  // imgTwo.src = busmallItems[showItemIndex.pop()].photo;
-  // imgTwo.alt = busmallItems[showItemIndex.pop()].name;
-  // busmallItems[showItemIndex.pop()].views++;
-
-  // imgThree.src = busmallItems[showItemIndex.pop()].photo;
-  // imgThree.alt = busmallItems[showItemIndex.pop()].name;
-  // busmallItems[showItemIndex.pop()].views++;
 }
 renderImgs();
 
@@ -156,14 +165,14 @@ function renderChart() {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      scales: { 
+      scales: {
         y: {
           beginAtZero: true
         }
       }
     }
   };
-new Chart(ctx, myChartObj);
+  new Chart(ctx, myChartObj);
 }
 //***********Event Handlers***********
 function handleClick(event) {
@@ -183,6 +192,16 @@ function handleClick(event) {
     // renderChart();
   }
 
+  // ******** LOCAL STORAGE PART 1 ************
+
+  // STEP 1: STRINGIFY DATA
+  let stringifieItems = JSON.stringify(busmallItems);
+
+  console.log(stringifieItems);
+
+  // STEP 2: ADD TO LOCAL STORAGE
+  localStorage.setItem('busmallItems', stringifieItems);
+
 }
 
 function handleShowResult() {
@@ -190,12 +209,12 @@ function handleShowResult() {
   chart.hidden = false;
   if (busmallCount === 0) {
     renderChart();
-//     for (let i = 0; i < busmallItems.length; i++) {
-//       let liElement = document.createElement('li');
-//       liElement.textContent = `${busmallItems[i].name} showed ${busmallItems[i].views} times and voted for ${busmallItems[i].votes}
-// times.`;
-//       resultsList.appendChild(liElement);
-//     }
+    //     for (let i = 0; i < busmallItems.length; i++) {
+    //       let liElement = document.createElement('li');
+    //       liElement.textContent = `${busmallItems[i].name} showed ${busmallItems[i].views} times and voted for ${busmallItems[i].votes}
+    // times.`;
+    //       resultsList.appendChild(liElement);
+    //     }
   }
 }
 //***********Event listeners***********
