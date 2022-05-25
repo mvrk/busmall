@@ -175,16 +175,13 @@ function handleClick(event) {
       busmallItems[i].votes++;
     }
   }
-
   renderImgs();
 
   if (busmallCount === 0) {
     imgContainer.removeEventListener('click', handleClick);
     // renderChart();
   }
-
 }
-
 function handleShowResult() {
   let chart = document.getElementById('chart-container');
   chart.hidden = false;
@@ -201,3 +198,6 @@ function handleShowResult() {
 //***********Event listeners***********
 imgContainer.addEventListener('click', handleClick);
 shwoResultsBtn.addEventListener('click', handleShowResult);
+
+
+
