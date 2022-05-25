@@ -154,7 +154,9 @@ function renderChart() {
       }]
     },
     options: {
-      scales: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: { 
         y: {
           beginAtZero: true
         }
@@ -184,6 +186,8 @@ function handleClick(event) {
 }
 
 function handleShowResult() {
+  let chart = document.getElementById('chart-container');
+  chart.hidden = false;
   if (busmallCount === 0) {
     renderChart();
 //     for (let i = 0; i < busmallItems.length; i++) {
